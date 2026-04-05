@@ -1,0 +1,8 @@
+package org.avi1606.financedataprocessing.exception;
+
+public class UnauthorizedException extends RuntimeException {
+    public UnauthorizedException(String message) {
+        super(message);
+    }
+}
+
