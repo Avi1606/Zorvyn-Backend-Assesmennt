@@ -109,9 +109,12 @@ public class TransactionController {
 
     @GetMapping("/insights")
     @PreAuthorize("hasAnyRole('ANALYST', 'ADMIN')")
-    public ResponseEntity<?> getInsights() {
+    public ResponseEntity<List<TransactionResponse>> getInsights() {
         try {
-            Object insights = transactionService.getRecentTransactions(10);
+            List<TransactionResponse> insights = transactionService.getRecentTransactions(10)
+                    .stream()
+                    .map(TransactionMapper::toResponse)
+                    .collect(Collectors.toList());
             return ResponseEntity.ok(insights);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -120,8 +123,8 @@ public class TransactionController {
 
     private UUID getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        // In a real implementation, extract userId from JWT token
-        return UUID.randomUUID();
+        // principal is the userId string we stored in JWT
+        return UUID.fromString((String) authentication.getPrincipal());
     }
 }
 

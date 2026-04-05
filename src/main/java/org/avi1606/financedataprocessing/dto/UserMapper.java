@@ -25,11 +25,8 @@ public class UserMapper {
                 .collect(Collectors.toList());
     }
 
-    // Static method for controller use
+    // Static helper methods for convenient use in controllers
     public static UserResponse toResponse(User user) {
-        if (user == null) {
-            return null;
-        }
         return UserResponse.builder()
                 .id(user.getId())
                 .name(user.getName())
@@ -40,5 +37,12 @@ public class UserMapper {
                 .updatedAt(user.getUpdatedAt())
                 .build();
     }
+
+    public static List<UserResponse> toResponseList(List<User> users) {
+        return users.stream()
+                .map(UserMapper::toResponse)
+                .collect(Collectors.toList());
+    }
 }
+
 

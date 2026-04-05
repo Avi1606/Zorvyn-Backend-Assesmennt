@@ -2,6 +2,8 @@ package org.avi1606.financedataprocessing.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.avi1606.financedataprocessing.dto.RegisterRequest;
+import org.avi1606.financedataprocessing.dto.UserMapper;
+import org.avi1606.financedataprocessing.dto.UserResponse;
 import org.avi1606.financedataprocessing.enums.Role;
 import org.avi1606.financedataprocessing.enums.UserStatus;
 import org.avi1606.financedataprocessing.exception.ResourceNotFoundException;
@@ -40,9 +42,15 @@ public class UserService {
         return savedUser;
     }
 
-    public User getUserById(UUID userId) {
+    // Internal method for getting User entity (not DTO)
+    public User getUserEntityById(UUID userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + userId));
+    }
+
+    public UserResponse getUserById(UUID userId) {
+        User user = getUserEntityById(userId);
+        return UserMapper.toResponse(user);
     }
 
     public User getUserByEmail(String email) {
@@ -50,31 +58,32 @@ public class UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserResponse> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return UserMapper.toResponseList(users);
     }
 
     @Transactional
-    public User updateUserStatus(UUID userId, UserStatus status) {
-        User user = getUserById(userId);
+    public UserResponse updateUserStatus(UUID userId, UserStatus status) {
+        User user = getUserEntityById(userId);
         user.setStatus(status);
         User updatedUser = userRepository.save(user);
         log.info("User status updated: {} - {}", userId, status);
-        return updatedUser;
+        return UserMapper.toResponse(updatedUser);
     }
 
     @Transactional
-    public User updateUserRole(UUID userId, Role role) {
-        User user = getUserById(userId);
+    public UserResponse updateUserRole(UUID userId, Role role) {
+        User user = getUserEntityById(userId);
         user.setRole(role);
         User updatedUser = userRepository.save(user);
         log.info("User role updated: {} - {}", userId, role);
-        return updatedUser;
+        return UserMapper.toResponse(updatedUser);
     }
 
     @Transactional
     public void deleteUser(UUID userId) {
-        User user = getUserById(userId);
+        User user = getUserEntityById(userId);
         userRepository.delete(user);
         log.info("User deleted: {}", userId);
     }

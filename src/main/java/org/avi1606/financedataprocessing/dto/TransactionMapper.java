@@ -28,11 +28,8 @@ public class TransactionMapper {
                 .collect(Collectors.toList());
     }
 
-    // Static method for controller use
+    // Static helper methods for convenient use in controllers
     public static TransactionResponse toResponse(Transaction transaction) {
-        if (transaction == null) {
-            return null;
-        }
         return TransactionResponse.builder()
                 .id(transaction.getId())
                 .amount(transaction.getAmount())
@@ -47,4 +44,5 @@ public class TransactionMapper {
                 .build();
     }
 }
+
 

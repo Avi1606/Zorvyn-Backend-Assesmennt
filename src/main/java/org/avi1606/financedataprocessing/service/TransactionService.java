@@ -26,7 +26,7 @@ public class TransactionService {
 
     @Transactional
     public Transaction createTransaction(TransactionRequest transactionRequest, UUID userId) {
-        User user = userService.getUserById(userId);
+        User user = userService.getUserEntityById(userId);
         Transaction transaction = Transaction.builder()
                 .amount(transactionRequest.getAmount())
                 .type(transactionRequest.getType())
