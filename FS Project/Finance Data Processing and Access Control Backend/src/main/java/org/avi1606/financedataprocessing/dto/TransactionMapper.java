@@ -27,24 +27,5 @@ public class TransactionMapper {
                 .map(this::toDto)
                 .collect(Collectors.toList());
     }
-
-    // Static method for controller use
-    public static TransactionResponse toResponse(Transaction transaction) {
-        if (transaction == null) {
-            return null;
-        }
-        return TransactionResponse.builder()
-                .id(transaction.getId())
-                .amount(transaction.getAmount())
-                .type(transaction.getType())
-                .category(transaction.getCategory())
-                .date(transaction.getDate())
-                .notes(transaction.getNotes())
-                .createdById(transaction.getCreatedBy().getId())
-                .createdByName(transaction.getCreatedBy().getName())
-                .createdAt(transaction.getCreatedAt())
-                .isDeleted(transaction.getIsDeleted())
-                .build();
-    }
 }
 

@@ -24,21 +24,5 @@ public class UserMapper {
                 .map(this::toDto)
                 .collect(Collectors.toList());
     }
-
-    // Static method for controller use
-    public static UserResponse toResponse(User user) {
-        if (user == null) {
-            return null;
-        }
-        return UserResponse.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .email(user.getEmail())
-                .role(user.getRole())
-                .status(user.getStatus())
-                .createdAt(user.getCreatedAt())
-                .updatedAt(user.getUpdatedAt())
-                .build();
-    }
 }
 
